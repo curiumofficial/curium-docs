@@ -188,44 +188,28 @@ cd curium/src
 #Select OS architecture
     if [ `getconf LONG_BIT` = "64" ]
         then
-            wget https://github.com/curiumcrypto/curium/releases/download/v0.1.2/curium-v0.1.2-lin-64bits.zip
-            unzip curium-v0.1.2-lin-64bits.zip
+            wget https://github.com/curiumofficial/curium/releases/download/v1.0.1/curium-1.0.1-x86_64-linux-gnu.tar.gz
+            unzip tar -xzf curium-1.0.1-x86_64-linux-gnu.tar.gz
     else
-        wget https://github.com/curiumcrypto/curium/releases/download/v0.1.2/curium-v0.1.2-lin-32bits.zip
-        unzip curium-v0.1.2-lin-32bits.zip
+        wget https://github.com/curiumofficial/curium/releases/download/v1.0.1/curium-1.0.1-i686-pc-linux-gnu.tar.gz
+        unzip tar -xzf curium-1.0.1-i686-pc-linux-gnu.tar.gz
     fi
-chmod +x curiumd
-chmod +x curium-cli
-chmod +x curium-tx
+chmod +x curium-1.0.1/bin/curiumnd
+chmod +x curium-1.0.1/bin/curiumn-cli
+chmod +x curium-1.0.1/bin/curiumn-tx
 
 # Move binaries do lib folder
-sudo mv curium-cli /usr/bin/curium-cli
-sudo mv curium-tx /usr/bin/curium-tx
-sudo mv curiumd /usr/bin/curiumd
+sudo mv curium-1.0.1/bin/curiumn-cli /usr/bin/curiumn-cli
+sudo mv curium-1.0.1/bin/curiumn-tx /usr/bin/curiumn-tx
+sudo mv curium-1.0.1/bin/curiumnd /usr/bin/curiumnd
 
 #run daemon
-curiumd -daemon -datadir=/root/.curiumcore
+curiumnd -daemon -datadir=/root/.curiumcru
 
-TOTALBLOCKS=$(curl https://explorer.curiumproject.org/api/getblockcount)
+TOTALBLOCKS=$(curl http://explorer.curiumofficial.com//api/getblockcount)
 
 sleep 10
 
-# Download and install sentinel
-if [ -n "$3" ]; then
-    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=9"
-fi
-echo && echo "Installing Sentinel..."
-sleep 3
-cd
-sudo apt-get -y install python3-pip
-sudo pip3 install virtualenv
-sudo git clone https://github.com/curiumcrypto/sentinel.git /root/sentinel
-cd /root/sentinel
-virtualenv venv
-. venv/bin/activate
-pip install -r requirements.txt
-export EDITOR=nano
-(crontab -l -u root 2>/dev/null; echo '* * * * * cd /root/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1') | sudo crontab -u root -
 
 # Create a cronjob for making sure curiumd runs after reboot
 if ! crontab -l | grep "@reboot curiumd -daemon"; then
@@ -242,7 +226,7 @@ if [ -n "$3" ]; then
 fi
 while [ $COUNTER -lt $TOTALBLOCKS ]; do
     echo The current progress is $COUNTER/$TOTALBLOCKS
-    let COUNTER=$(curium-cli -datadir=/root/.curiumcore getblockcount)
+    let COUNTER=$(curium-cli -datadir=/root/.curiumcru getblockcount)
     sleep 5
 done
 echo "Sync complete"
@@ -251,5 +235,5 @@ if [ -n "$3" ]; then
 fi
 
 echo && echo "If you put correct PrivKey and VPS IP the daemon should be running."
-echo "Now you can start ALIAS on local wallet and finally check here with curium-cli masternode status."
+echo "Now you can start ALIAS on local wallet and finally check here with curiumn-cli masternode status."
 echo && echo
