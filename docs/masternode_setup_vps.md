@@ -1,4 +1,4 @@
-Motion MasterNode Manual Install
+Curium MasterNode Manual Install
 -------
 
 ### Preparation
@@ -6,7 +6,7 @@ Motion MasterNode Manual Install
 - **Recommended VPS size:** 2GB RAM (if less its ok, we can make swap partition)
 - **It must be Ubuntu 16.04 (Xenial)**
 - Make sure you have a transaction of **exactly 1000 XMN** in your desktop wallet (If you dont, you can auto-make that transaction from you to you).
-- motion.conf file on LOCAL wallet MUST BE EMPTY! (if you haven't touched this file it's OK)
+- curium.conf file on LOCAL wallet MUST BE EMPTY! (if you haven't touched this file it's OK)
 - masternode.conf file on VPS wallet MUST BE EMPTY! (if you haven't touched this file it's OK)
 - You need a different IP for each masternode you plan to host
 
@@ -62,15 +62,15 @@ Go to wallet `settings` => and click `Open masternode configuration file`
 
 You should see 2 lines both with a # to comment them out. Please make a new line and add:
 
-`MN1 (YOUR VPS IP):7979 masternodeprivkey tx_id digit`
+`MN1 (YOUR VPS IP):18745 masternodeprivkey tx_id digit`
 
 Example:
 
-`MN1 148.124.58.33:7979 7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 6a66ad6011ee363c2d97da0b55b73584fef376dc0ef43137b478aa73b4b906b0 0`
+`MN1 148.124.58.33:18745 7xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 6a66ad6011ee363c2d97da0b55b73584fef376dc0ef43137b478aa73b4b906b0 0`
 
 Put your data correctly, save it and close.
 
-Go to Motion Wallet, Click `Settings`, Check `Show Masternodes Tab`
+Go to Curium Wallet, Click `Settings`, Check `Show Masternodes Tab`
 
 Save and Restart your wallet.
 
@@ -100,18 +100,18 @@ We need to install some dependencies. Please copy, paste and hit enter:
 apt-get update;apt-get upgrade -y;apt-get dist-upgrade -y;apt-get install nano htop git wget unzip -y;apt-get install build-essential libtool autotools-dev automake pkg-config -y;apt-get install libssl-dev libevent-dev bsdmainutils software-properties-common -y;apt-get install libboost-all-dev -y;apt-get install libzmq3-dev libminiupnpc-dev libssl-dev libevent-dev -y;add-apt-repository ppa:bitcoin/bitcoin -y;apt-get update;apt-get install libdb4.8-dev libdb4.8++-dev -y;
 ```
 
-Now we have to build the wallet. Clone the Motion Github from Here:
+Now we have to build the wallet. Clone the Curium Github from Here:
 
 ```
-wget https://github.com/motioncrypto/motion/archive/v0.1.2.zip
+wget https://github.com/curiumcrypto/curium/archive/v0.1.2.zip
 unzip v0.1.2.zip
-mv /root/motion-0.1.2 /root/motion
+mv /root/curium-0.1.2 /root/curium
 ```
 
-Then navigate to the newly created motion folder and execute the following, line by line:
+Then navigate to the newly created curium folder and execute the following, line by line:
 
 ```
-cd motion
+cd curium
 chmod 755 autogen.sh
 ./autogen.sh
 ./configure
@@ -123,27 +123,27 @@ make
 
 Your build will FAIL if you do not have enough RAM memory. If you do not have 2GB or more make a Swap partition BEFORE you try to build!
 
-This process can take a while, it will compile the Motion wallet.
+This process can take a while, it will compile the Curium wallet.
 
 After build completes, you need to start the daemon to create data folders and files, wait a few seconds and stop the daemon 
 so you can edit the conf file on next step, use the follow commands to navigate to src folder to do it:
 
 ```
 cd src/
-./motiond -daemon
+./curiumd -daemon
 ```
 
 Wait a few seconds then stop with:
 
-`./motion-cli stop`
+`./curium-cli stop`
 
 Navigate to the data directory by typing:
 
-`cd ~/.motioncore`
+`cd ~/.curiumcore`
 
 now edit with:
 
-`nano motion.conf`
+`nano curium.conf`
 
 Now copy paste the following configuration, and edit with your VPS IP and msternodeprivkey:
 
@@ -154,37 +154,37 @@ rpcallowip=127.0.0.1
 listen=1
 server=1
 daemon=1
-rpcport=3385
+rpcport=11771
 staking=0
-externalip=(YOUR VPS IP):7979
+externalip=(YOUR VPS IP):18745
 masternode=1
 masternodeprivkey=masternodeprivkey
 ```
 
 **IMPORTANT**
 You need to change IP to your VPS IP address, the `masternodeprivkey` is the one that you got from the main wallet.
-Choose whatever you like for user and password. Note that the port should be `7979` for Motion masternodes and rpcport is `3385` for sentinel.
+Choose whatever you like for user and password. Note that the port should be `18745` for Curium masternodes and rpcport is `11771` for sentinel.
 
-Hold `Ctrl + X`, type `Y` => Enter The file motion.conf is now saved!
+Hold `Ctrl + X`, type `Y` => Enter The file curium.conf is now saved!
 
-If you have a firewall running, you need to open the `7979` and `3385` port, example on UFW:
+If you have a firewall running, you need to open the `18745` and `11771` port, example on UFW:
 
 ```
-sudo ufw allow 7979/tcp
-sudo ufw allow 3385/tcp
+sudo ufw allow 18745/tcp
+sudo ufw allow 11771/tcp
 sudo ufw enable
 ```
 
-Now Let's restart motiond:
+Now Let's restart curiumd:
 
 ```
-cd /root/motion/src/
-./motiond -daemon
+cd /root/curium/src/
+./curiumd -daemon
 ```
 
 Wait like 10 mins for your wallet to download the blockchain. You can check the progress with the following command :
 
-`./motion-cli getblockcount`
+`./curium-cli getblockcount`
 
 Now we need SENTINEL to fix WATCHDOG EXPIRED issue:
 
@@ -201,16 +201,16 @@ sudo apt-get update; sudo apt-get install python3-pip
 sudo pip3 install virtualenv
 ```
 
-Make sure the local Motion daemon running is at least version 0.1.2 (10200)
+Make sure the local Curium daemon running is at least version 0.1.2 (10200)
 
-### Install Motion Sentinel
+### Install Curium Sentinel
 Clone the Sentinel repo and install Python dependencies.
 
 type in terminal:
 
 ```
 cd
-git clone https://github.com/motioncrypto/sentinel.git && cd sentinel
+git clone https://github.com/curiumcrypto/sentinel.git && cd sentinel
 virtualenv ./venv
 ./venv/bin/pip install -r requirements.txt
 ```
@@ -231,12 +231,12 @@ Test the config by runnings all tests from the sentinel folder you cloned into
 
 `./venv/bin/py.test ./test`
 
-With all tests passing and crontab setup, Sentinel will stay in sync with motiond and the installation is complete
+With all tests passing and crontab setup, Sentinel will stay in sync with curiumd and the installation is complete
 
 ### Configuration (Optional)
-An alternative (non-default) path to the motion.conf file can be specified in sentinel.conf:
+An alternative (non-default) path to the curium.conf file can be specified in sentinel.conf:
 
-`motion_conf=/path/to/motion.conf`
+`curium_conf=/path/to/curium.conf`
 
 ### Troubleshooting
 To view debug output, set the SENTINEL_DEBUG environment variable to anything non-zero, then run the script manually:
@@ -251,8 +251,8 @@ You need to wait for 15 confirmations in order to start the masternode on your V
 You can check by going to putty and type:
 
 ```
-cd /root/motion/src
-./motion-cli getblockcount (needs to be more than 0 to be in sync)
+cd /root/curium/src
+./curium-cli getblockcount (needs to be more than 0 to be in sync)
 ```
 
 **NOTE:** 
@@ -265,8 +265,8 @@ Now Click `start-all`. Your masternode should be now up and running!
 You can check the masternode status by going to the masternode vps and typing:
 
 ```
-cd /root/motion/src/
-./motion-cli masternode status
+cd /root/curium/src/
+./curium-cli masternode status
 ```
 
 If your masternode is running it should print `Masternode successfully started`.

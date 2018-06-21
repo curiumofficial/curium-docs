@@ -2,25 +2,28 @@
 
 clear
 cd ~
-echo "███████████████████████████████████████████████████████████████████████████████"
-echo "███████████████████░░   ░▒█████████████████████████▓░    ░▒████████████████████"
-echo "██████████████████▓░      ░▓██████████████████████▒      ░░████████████████████"
-echo "██████████████████▓░        ▒███████████████████▓░       ░▓████████████████████"
-echo "██████████████████▓░         ░▓████████████████▒       ░░██████████████████████"
-echo "██████████████████▓░     ░     ░▒███████████▓░      ░▒█████████████████████████"
-echo "██████████████████▓░     ░░      ░▓████████▒       ░▓██████████████████████████"
-echo "██████████████████▓░     ░▓█▓░      ░▒█▓░        ░░████████████████████████████"
-echo "██████████████████▓░     ░▓███▒      ░░░      ░░▓██████████████████████████████"
-echo "██████████████████▓░     ░▓████▒             ░▓████████████████████████████████"
-echo "██████████████████▓░     ░▓█████▓░          ░██████████████████████████████████"
-echo "██████████████████▓░     ░▓███████▒       ░▓███████████████████████████████████"
-echo "██████████████████▓░     ░▓████████▓░   ░▒█████████████████████████████████████"
-echo "██████████████████▓░     ░▓███████████▓▓███████████████████████████████████████"
-echo "██████████████████▓░     ░▓████████████████████████████████████████████████████"
-echo "██████████████████▓░     ░▓██████████████████████████▓▓▓▓▓█████████████████████"
-echo "██████████████████▓░     ░▓█████████████████████████▓▓▓▓▓▓▓████████████████████"
-echo "███████████████████▒     ▒███████████████████████████▓▓▓▓▓█████████████████████"
-echo "█████████████████████▓▓▓███████████████████████████████████████████████████████"
+echo "          _____          "
+echo "         /\    \         "
+echo "        /::\    \        "
+echo "       /::::\    \       "
+echo "      /::::::\    \      "
+echo "     /:::/\:::\    \     "
+echo "    /:::/  \:::\    \    "
+echo "   /:::/    \:::\    \   "
+echo "  /:::/    / \:::\    \  "
+echo " /:::/    /   \:::\    \ "
+echo "/:::/____/     \:::\____\ "
+echo "\:::\    \      \::/    / "
+echo " \:::\    \      \/____/"
+echo "  \:::\    \            "
+echo "   \:::\    \           "
+echo "    \:::\    \         "
+echo "     \:::\    \        "
+echo "      \:::\    \        "
+echo "       \:::\____\        "
+echo "        \:::\    \        "
+echo "         \::/    /     "
+echo "          \/____/           "
 echo && echo && echo
 sleep 2
 
@@ -44,14 +47,14 @@ if [ "$KEY" == "" ]; then
     fi
 fi
 IP=$(curl http://icanhazip.com --ipv4)
-PORT="7979"
+PORT="18745"
 if [[ "$IP" == "" ]]; then
     read -e -p "VPS Server IP Address: " IP
 fi
 echo "Your IP and Port is $IP:$PORT"
 if [ -n "$3" ]; then
     echo "Saving IP"
-    DOCUMENTID=$(curl https://us-central1-motion-masternode-installer.cloudfunctions.net/saveIp?ip=$IP)
+    DOCUMENTID=$(curl https://us-central1-curium-masternode-installer.cloudfunctions.net/saveIp?ip=$IP)
     echo "Your DocumentId is $DOCUMENTID"
 fi
 if [ -z "$2" ]; then
@@ -75,7 +78,7 @@ fi
 # Add swap if needed
 if [[ ("$add_swap" == "y" || "$add_swap" == "Y" || "$add_swap" == "") ]]; then
     if [ -n "$3" ]; then
-        curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=2"
+        curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=2"
     fi
 
     if [ ! -f /swapfile ]; then
@@ -100,7 +103,7 @@ fi
 # Update system 
 echo && echo "Upgrading system..."
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=3"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=3"
 fi
 sleep 3
 sudo apt-get -y update
@@ -109,7 +112,7 @@ sudo apt-get -y upgrade
 # Install required packages
 echo && echo "Installing base packages..."
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=4"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=4"
 fi
 sleep 3
 sudo apt-get -y install \
@@ -119,7 +122,7 @@ python-virtualenv
 # Install fail2ban if needed
 if [[ ("$install_fail2ban" == "y" || "$install_fail2ban" == "Y" || "$install_fail2ban" == "") ]]; then
     if [ -n "$3" ]; then
-        curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=5"
+        curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=5"
     fi
 
     echo && echo "Installing fail2ban..."
@@ -131,7 +134,7 @@ fi
 # Install firewall if needed
 if [[ ("$UFW" == "y" || "$UFW" == "Y" || "$UFW" == "") ]]; then
     if [ -n "$3" ]; then
-        curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=6"
+        curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=6"
     fi
 
     echo && echo "Installing UFW..."
@@ -142,81 +145,81 @@ if [[ ("$UFW" == "y" || "$UFW" == "Y" || "$UFW" == "") ]]; then
     sudo ufw default deny incoming
     sudo ufw default allow outgoing
     sudo ufw allow ssh
-    sudo ufw allow 3385/tcp
-    sudo ufw allow 7979/tcp
+    sudo ufw allow 11771/tcp
+    sudo ufw allow 18745/tcp
     echo "y" | sudo ufw enable
     echo && echo "Firewall installed and enabled!"
 fi
 
-# Create config for motion
+# Create config for curium
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=7"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=7"
 fi
-echo && echo "Putting The Gears Motion..."
+echo && echo "Putting The Gears Curium..."
 sleep 3
-sudo mkdir /root/.motioncore #jm
+sudo mkdir /root/.curiumcore #jm
 
 rpcuser=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
 rpcpassword=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
-sudo touch /root/.motioncore/motion.conf
+sudo touch /root/.curiumcore/curium.conf
 echo '
 rpcuser='$rpcuser'
 rpcpassword='$rpcpassword'
 rpcallowip=127.0.0.1
 listen=1
 server=1
-rpcport=3385
+rpcport=11771
 daemon=0 # required for systemd
 logtimestamps=1
 maxconnections=256
 externalip='$IP:$PORT'
 masternodeprivkey='$KEY'
 masternode=1
-' | sudo -E tee /root/.motioncore/motion.conf
+' | sudo -E tee /root/.curiumcore/curium.conf
 
 
-#Download pre-compiled motion and run
+#Download pre-compiled curium and run
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=8"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=8"
 fi
-mkdir motion 
-mkdir motion/src
-cd motion/src
+mkdir curium 
+mkdir curium/src
+cd curium/src
 #Select OS architecture
     if [ `getconf LONG_BIT` = "64" ]
         then
-            wget https://github.com/motioncrypto/motion/releases/download/v0.1.2/motion-v0.1.2-lin-64bits.zip
-            unzip motion-v0.1.2-lin-64bits.zip
+            wget https://github.com/curiumcrypto/curium/releases/download/v0.1.2/curium-v0.1.2-lin-64bits.zip
+            unzip curium-v0.1.2-lin-64bits.zip
     else
-        wget https://github.com/motioncrypto/motion/releases/download/v0.1.2/motion-v0.1.2-lin-32bits.zip
-        unzip motion-v0.1.2-lin-32bits.zip
+        wget https://github.com/curiumcrypto/curium/releases/download/v0.1.2/curium-v0.1.2-lin-32bits.zip
+        unzip curium-v0.1.2-lin-32bits.zip
     fi
-chmod +x motiond
-chmod +x motion-cli
-chmod +x motion-tx
+chmod +x curiumd
+chmod +x curium-cli
+chmod +x curium-tx
 
 # Move binaries do lib folder
-sudo mv motion-cli /usr/bin/motion-cli
-sudo mv motion-tx /usr/bin/motion-tx
-sudo mv motiond /usr/bin/motiond
+sudo mv curium-cli /usr/bin/curium-cli
+sudo mv curium-tx /usr/bin/curium-tx
+sudo mv curiumd /usr/bin/curiumd
 
 #run daemon
-motiond -daemon -datadir=/root/.motioncore
+curiumd -daemon -datadir=/root/.curiumcore
 
-TOTALBLOCKS=$(curl https://explorer.motionproject.org/api/getblockcount)
+TOTALBLOCKS=$(curl https://explorer.curiumproject.org/api/getblockcount)
 
 sleep 10
 
 # Download and install sentinel
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=9"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=9"
 fi
 echo && echo "Installing Sentinel..."
 sleep 3
 cd
 sudo apt-get -y install python3-pip
 sudo pip3 install virtualenv
-sudo git clone https://github.com/motioncrypto/sentinel.git /root/sentinel
+sudo git clone https://github.com/curiumcrypto/sentinel.git /root/sentinel
 cd /root/sentinel
 virtualenv venv
 . venv/bin/activate
@@ -224,29 +227,29 @@ pip install -r requirements.txt
 export EDITOR=nano
 (crontab -l -u root 2>/dev/null; echo '* * * * * cd /root/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1') | sudo crontab -u root -
 
-# Create a cronjob for making sure motiond runs after reboot
-if ! crontab -l | grep "@reboot motiond -daemon"; then
-  (crontab -l ; echo "@reboot motiond -daemon") | crontab -
+# Create a cronjob for making sure curiumd runs after reboot
+if ! crontab -l | grep "@reboot curiumd -daemon"; then
+  (crontab -l ; echo "@reboot curiumd -daemon") | crontab -
 fi
 
-# cd to motion-cli for final, no real need to run cli with commands as service when you can just cd there
-echo && echo "Motion Masternode Setup Complete!"
+# cd to curium-cli for final, no real need to run cli with commands as service when you can just cd there
+echo && echo "Curium Masternode Setup Complete!"
 echo && echo "Now we will wait until the node get full sync."
 
 COUNTER=0
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=10"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=10"
 fi
 while [ $COUNTER -lt $TOTALBLOCKS ]; do
     echo The current progress is $COUNTER/$TOTALBLOCKS
-    let COUNTER=$(motion-cli -datadir=/root/.motioncore getblockcount)
+    let COUNTER=$(curium-cli -datadir=/root/.curiumcore getblockcount)
     sleep 5
 done
 echo "Sync complete"
 if [ -n "$3" ]; then
-    curl "https://us-central1-motion-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=11"
+    curl "https://us-central1-curium-masternode-installer.cloudfunctions.net/step?id=${DOCUMENTID}&step=11"
 fi
 
 echo && echo "If you put correct PrivKey and VPS IP the daemon should be running."
-echo "Now you can start ALIAS on local wallet and finally check here with motion-cli masternode status."
+echo "Now you can start ALIAS on local wallet and finally check here with curium-cli masternode status."
 echo && echo

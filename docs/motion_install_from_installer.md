@@ -1,4 +1,4 @@
-Motion MasterNode Install from Masternode Installer (Recommended)
+Curium MasterNode Install from Masternode Installer (Recommended)
 -------
 
 ### Preparation
@@ -16,8 +16,8 @@ It will create a new droplet (VPS) for each MasterNode you plan to host.
 
 ### Part 1
 
-- Download the [Masternode Installer](https://github.com/motioncrypto/masternode-installer/releases) for your platform (Currently only 64 bits OS supported).
-- Close your Motion Wallet if is open.
+- Download the [Masternode Installer](https://github.com/curiumcrypto/masternode-installer/releases) for your platform (Currently only 64 bits OS supported).
+- Close your Curium Wallet if is open.
 - Run the Installer.
 - Login into your DigitalOcean account.
 

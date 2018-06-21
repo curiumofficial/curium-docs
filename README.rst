@@ -1,4 +1,4 @@
-MotionProject Docs
+CuriumProject Docs
 ========
 
 Welcome to our docs

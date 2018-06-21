@@ -31,7 +31,7 @@ if [[ "$key" == "" ]]; then
     echo "WARNING: No private key entered, exiting!!!"
     echo && exit
 fi
-read -e -p "VPS Server IP Address and Masternode Port like IP:7979 : " ip
+read -e -p "VPS Server IP Address and Masternode Port like IP:18745 : " ip
 echo && sleep 3
 
 # Add swap
@@ -99,52 +99,52 @@ python-virtualenv
     echo && echo "Configuring UFW..."
     sleep 3
     sudo ufw allow ssh
-    sudo ufw allow 3385/tcp
-    sudo ufw allow 7979/tcp
+    sudo ufw allow 11771/tcp
+    sudo ufw allow 18745/tcp
     echo "y" | sudo ufw enable
     echo && echo "Firewall installed and enabled!"
 
-# Create config for motion
-echo && echo "Putting The Gears Motion..."
+# Create config for curium
+echo && echo "Putting The Gears Curium..."
 sleep 3
-sudo mkdir /root/.motioncore #jm
+sudo mkdir /root/.curiumcore #jm
 
 rpcuser=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
 rpcpassword=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
-sudo touch /root/.motioncore/motion.conf
+sudo touch /root/.curiumcore/curium.conf
 echo '
 rpcuser='$rpcuser'
 rpcpassword='$rpcpassword'
 rpcallowip=127.0.0.1
 listen=1
 server=1
-rpcport=3385
+rpcport=11771
 daemon=0 # required for systemd
 logtimestamps=1
 maxconnections=256
 externalip='$ip'
 masternodeprivkey='$key'
 masternode=1
-' | sudo -E tee /root/.motioncore/motion.conf
+' | sudo -E tee /root/.curiumcore/curium.conf
 
 
-#Download pre-compiled motion and run
-mkdir motion 
-mkdir motion/src
-cd motion/src
-wget https://github.com/motioncrypto/motion/releases/download/v0.1.2/motion-v0.1.2-arm.zip
-unzip motion-v0.1.2-arm.zip
-chmod +x motiond
-chmod +x motion-cli
-chmod +x motion-tx
+#Download pre-compiled curium and run
+mkdir curium 
+mkdir curium/src
+cd curium/src
+wget https://github.com/curiumcrypto/curium/releases/download/v0.1.2/curium-v0.1.2-arm.zip
+unzip curium-v0.1.2-arm.zip
+chmod +x curiumd
+chmod +x curium-cli
+chmod +x curium-tx
 
 # Move binaries do lib folder
-sudo mv motion-cli /usr/bin/motion-cli
-sudo mv motion-tx /usr/bin/motion-tx
-sudo mv motiond /usr/bin/motiond
+sudo mv curium-cli /usr/bin/curium-cli
+sudo mv curium-tx /usr/bin/curium-tx
+sudo mv curiumd /usr/bin/curiumd
 
 #run daemon
-motiond -daemon
+curiumd -daemon
 
 sleep 10
 
@@ -156,7 +156,7 @@ sudo apt-get install python-dev
 curl -O https://bootstrap.pypa.io/get-pip.py
 sudo python get-pip.py
 sudo pip install virtualenv
-sudo git clone https://github.com/motioncrypto/sentinel.git /root/sentinel
+sudo git clone https://github.com/curiumcrypto/sentinel.git /root/sentinel
 cd /root/sentinel
 virtualenv venv
 . venv/bin/activate
@@ -164,15 +164,15 @@ pip install -r requirements.txt
 export EDITOR=nano
 (crontab -l -u root 2>/dev/null; echo '* * * * * cd /root/sentinel && ./venv/bin/python bin/sentinel.py >/dev/null 2>&1') | sudo crontab -u root -
 
-# Create a cronjob for making sure motiond runs after reboot
-if ! crontab -l | grep "@reboot motiond -daemon"; then
-  (crontab -l ; echo "@reboot motiond -daemon") | crontab -
+# Create a cronjob for making sure curiumd runs after reboot
+if ! crontab -l | grep "@reboot curiumd -daemon"; then
+  (crontab -l ; echo "@reboot curiumd -daemon") | crontab -
 fi
 
-# cd to motion-cli for final, no real need to run cli with commands as service when you can just cd there
-echo && echo "Motion Masternode Setup Complete!"
+# cd to curium-cli for final, no real need to run cli with commands as service when you can just cd there
+echo && echo "Curium Masternode Setup Complete!"
 
 echo "If you put correct PrivKey and VPS IP the daemon should be running."
-echo "Wait 2 minutes then run motion-cli getinfo to check blocks."
-echo "When fully synced you can start ALIAS on local wallet and finally check here with motion-cli masternode status."
+echo "Wait 2 minutes then run curium-cli getinfo to check blocks."
+echo "When fully synced you can start ALIAS on local wallet and finally check here with curium-cli masternode status."
 echo && echo
